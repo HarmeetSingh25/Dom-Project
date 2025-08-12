@@ -1,10 +1,99 @@
+:root {
+  --pri: #cadcae;
+  --sec: #004030;
+  --tri1: #eda35a;
+  --tri2: #fee8d9;
+  --Text-color: #faf9ee;
+}
+@font-face {
+  font-family: Light;
+  src: url(./AeonikTRIAL-Light.otf);
+}
+@font-face {
+  font-family: Bold;
+  src: url(./AeonikTRIAL-Bold.otf);
+}
+@font-face {
+  font-family: Regular;
+  src: url(./AeonikTRIAL-Regular.otf);
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Bold;
+  color: var(--Text-color);
 }
 html,
 body {
   height: 100%;
   width: 100%;
+}
+main {
+  height: 100%;
+  width: 100%;
+}
+.Allelem {
+  position: absolute;
+  background-color: var(--sec);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+}
+.elem {
+  border-radius: 10px;
+  position: relative;
+  height: 50%;
+  width: 18%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: linear 0.2s;
+}
+.elem:active {
+  scale: 0.97;
+}
+.elem h2 {
+  color: black;
+  position: absolute;
+  bottom: 2%;
+  right: 3%;
+}
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.card-pages {
+  width: 100%;
+  height: 100%;
+}
+.fullPage {
+  position: absolute;
+  background-color: var(--sec);
+  padding: 1.5rem 2rem;
+  height: 100%;
+  width: 100%;
+  display: none;
+}
+.fullPage h1 {
+  font-size: 3rem;
+}
+.close {
+  transition: linear 0.2s;
+  font-size: 1rem;
+  border-radius: 5px;
+  position: absolute;
+  top: 3%;
+  right: 20%;
+  border: none;
+  background-color: var(--tri1);
+  padding: 1rem 1.2rem;
+}
+.close:hover {
+  background-color: red;
+}
+.close:active {
+  scale: 0.97;
 }
