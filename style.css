@@ -103,7 +103,7 @@ img {
   display: flex;
   justify-content: space-between;
   margin-top: 2rem;
-  width: 90%;
+  width: 100%;
   margin-top: 1rem;
   height: 70%;
 }
@@ -160,6 +160,9 @@ img {
 }
 
 .Taskhold {
+  display: flex;
+  flex-direction: column;
+
   height: 100%;
   border-radius: 10px;
   width: 65%;
@@ -168,7 +171,8 @@ img {
   scrollbar-width: none;
 }
 .task {
-  gap: 10px;
+  position: relative;
+
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -179,6 +183,7 @@ img {
   background-color: #a2af9b;
 }
 .task h4 {
+  width: 100%;
   font-size: 1.5rem;
 }
 .Delete-btn {
@@ -188,8 +193,68 @@ img {
   border-radius: 6px;
   padding: 0.5rem 1.5rem;
   background-color: var(--tri1);
-  transition:  0.2s linear;
+  transition: 0.2s linear;
 }
 .Delete-btn:active {
   scale: 0.95;
+}
+.addTask form label {
+  justify-content: flex-start;
+  width: 100%;
+  align-items: center;
+  display: flex;
+}
+.addTask form label input {
+  width: 10%;
+  height: 20px;
+}
+.imp {
+  width: fit-content;
+  font-size: 1rem;
+  border-radius: 6px;
+  padding: 0.1rem 0.3rem;
+  background-color: red;
+}
+.TaskDetailContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* .TaskDetail {
+  display: none;
+  text-wrap: nowrap;
+  transition: all 0.3s ease; 
+  padding: 1rem 25rem;
+  background-color: var(--bg-color);
+  font-size: 2rem;
+  border-radius: 6px;
+  scale: 0.97;
+}
+.TaskDetail.active {
+  transform: scale(1);
+} */
+
+.TaskDetail {
+  text-wrap: nowrap;
+  opacity: 0;
+  width: 90%;
+  text-align: center;
+  visibility: hidden;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease; /* smooth transition */
+  padding: 1rem 2rem;
+  background-color: var(--bg-color);
+  font-size: 2rem;
+  border-radius: 6px;
+  transform: scale(0.97);
+}
+
+.TaskDetail.show {
+  opacity: 1;
+  visibility: visible;
+  max-height: 200px; /*enough to fit content */
+  transform: scale(1);
 }
