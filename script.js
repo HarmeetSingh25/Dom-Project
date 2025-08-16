@@ -20,7 +20,7 @@ Cards_FullPageClose();
 function ShowTaskDetail() {
   let tasks = document.querySelectorAll(".task");
   let details = document.querySelectorAll(".TaskDetail");
-  
+
   tasks.forEach((elem, index) => {
     elem.addEventListener("click", () => {
       details[index].classList.toggle("show");
@@ -43,7 +43,7 @@ function TaskCreate() {
     });
     const lastImp = Taskhold.querySelectorAll(".imp");
     const newImp = lastImp[lastImp.length - 1];
-    
+
     if (imp_Input.checked) {
       newImp.style.display = "inline";
     } else {
@@ -51,13 +51,14 @@ function TaskCreate() {
     }
     imp_Input.checked = false;
     let Delete_btn = document.querySelectorAll(".Delete-btn");
-    
+
     Delete_btn.forEach((elem) => {
       elem.addEventListener("click", () => {
         elem.parentElement.remove(); // Remove the task div
         document.querySelector(".TaskDetail").remove();
       });
     });
+    localStorage.setItem("currentTask", JSON.stringify(currentTask));
     Task_input.value = "";
     TaskDetail_input.value = "";
     ShowTaskDetail();
@@ -73,7 +74,6 @@ function fullCardPageDisplay() {
   });
 }
 fullCardPageDisplay();
-
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
