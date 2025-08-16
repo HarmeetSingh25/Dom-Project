@@ -8,6 +8,7 @@ let Taskhold = document.querySelector(".Taskhold");
 let form = document.getElementById("form");
 let currentTask = [];
 
+// Close buttons for cards
 function Cards_FullPageClose() {
   let close_btn = document.querySelectorAll(".close");
   close_btn.forEach((button, index) => {
@@ -17,6 +18,8 @@ function Cards_FullPageClose() {
   });
 }
 Cards_FullPageClose();
+
+// Show task details toggle
 function ShowTaskDetail() {
   let tasks = document.querySelectorAll(".task");
   let details = document.querySelectorAll(".TaskDetail");
@@ -27,45 +30,54 @@ function ShowTaskDetail() {
     });
   });
 }
+
+// 🔹 Function to render tasks from localStorage
+function renderTasks() {
+  Taskhold.innerHTML = ""; // clear UI
+  currentTask.forEach((task, index) => {
+    Taskhold.innerHTML += `
+      <div class="task">
+        <h4>${task.Task} <span class="imp" style="display:${task.Imp ? "inline" : "none"}">imp</span></h4>
+        <button class="Delete-btn">Delete</button>
+      </div>
+      <div class="TaskDetailContainer"><h5 class="TaskDetail">Todo Task Detail: ${task.TaskDetail}</h5></div>
+    `;
+  });
+
+  // Add delete functionality
+  let Delete_btn = document.querySelectorAll(".Delete-btn");
+  Delete_btn.forEach((elem, index) => {
+    elem.addEventListener("click", () => {
+      currentTask.splice(index, 1); // remove from array
+      localStorage.setItem("currentTask", JSON.stringify(currentTask)); // update storage
+      renderTasks(); // re-render
+    });
+  });
+
+  ShowTaskDetail();
+}
+
+// Add new task
 function TaskCreate() {
   addBtn.addEventListener("click", () => {
-    Taskhold.innerHTML += ` <div class="task">
-    <h4>${Task_input.value} <span class="imp">imp</span></h4>
-    <button class="Delete-btn">Delete</button>
-    </div>
-    <div class="TaskDetailContainer"><h5 class="TaskDetail">Todo Task Detail:${TaskDetail_input.value}</h5>
-    </div>
-    `;
     currentTask.push({
       Task: Task_input.value,
       TaskDetail: TaskDetail_input.value,
       Imp: imp_Input.checked,
     });
-    const lastImp = Taskhold.querySelectorAll(".imp");
-    const newImp = lastImp[lastImp.length - 1];
 
-    if (imp_Input.checked) {
-      newImp.style.display = "inline";
-    } else {
-      newImp.style.display = "none";
-    }
-    imp_Input.checked = false;
-    let Delete_btn = document.querySelectorAll(".Delete-btn");
+    localStorage.setItem("currentTask", JSON.stringify(currentTask)); // save to storage
+    renderTasks(); // refresh UI
 
-    Delete_btn.forEach((elem) => {
-      elem.addEventListener("click", () => {
-        elem.parentElement.remove(); // Remove the task div
-        document.querySelector(".TaskDetail").remove();
-      });
-    });
-    localStorage.setItem("currentTask", JSON.stringify(currentTask));
+    // reset inputs
     Task_input.value = "";
     TaskDetail_input.value = "";
-    ShowTaskDetail();
+    imp_Input.checked = false;
   });
 }
 TaskCreate();
 
+// Show full card
 function fullCardPageDisplay() {
   Cards.forEach((elem) => {
     elem.addEventListener("click", () => {
@@ -77,6 +89,10 @@ fullCardPageDisplay();
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  console.log(currentTask);
-  // localStorage.setItem(currentTask)
 });
+
+// 🔹 Load tasks from localStorage on page load
+if (localStorage.getItem("currentTask")) {
+  currentTask = JSON.parse(localStorage.getItem("currentTask"));
+  renderTasks();
+}
