@@ -258,3 +258,6 @@ img {
   max-height: 200px; /*enough to fit content */
   transform: scale(1);
 }
+.planner-page{
+  display: block;
+}
