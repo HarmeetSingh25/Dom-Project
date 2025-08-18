@@ -289,8 +289,10 @@ img {
 .day-planner-time p {
   position: absolute;
   top: 2%;
+  left: 1%;
 }
 .day-planner-time input {
+  margin-top: 0.2rem;
   width: 100%;
   padding: 0.4rem;
   outline: none;
