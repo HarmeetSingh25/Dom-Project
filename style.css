@@ -1,6 +1,7 @@
 :root {
   --pri: #cadcae;
   --sec: #004030;
+  --third: #3e5f44;
   --tri1: #eda35a;
   --tri2: #fee8d9;
   --Text-color: #faf9ee;
@@ -115,7 +116,7 @@ img {
   overflow: hidden;
   border-radius: 10px;
   padding: 1rem;
-  background-color: #3e5f44;
+  background-color: var(--third);
   width: 100%;
   height: 100%;
   display: flex;
@@ -162,11 +163,10 @@ img {
 .Taskhold {
   display: flex;
   flex-direction: column;
-
   height: 100%;
   border-radius: 10px;
   width: 65%;
-  background-color: #3e5f44;
+  background-color: var(--third);
   overflow: auto;
   scrollbar-width: none;
 }
@@ -258,6 +258,42 @@ img {
   max-height: 200px; /*enough to fit content */
   transform: scale(1);
 }
-.planner-page{
+.planner-page {
   display: block;
+  /* padding: 2rem; */
+}
+.day-planner {
+  gap: 2rem;
+  padding: 1.2rem;
+  margin-top: 2rem;
+  height: 85%;
+  display: flex;
+  align-items: flex-start;
+  /* justify-content:space-between; */
+  width: 100%;
+  background-color: var(--third);
+  flex-wrap: wrap;
+  scrollbar-width: none;
+  overflow: auto;
+}
+.day-planner-time {
+  position: relative;
+  align-items: center;
+  display: flex;
+  padding: 1rem 1rem;
+  background-color: var(--bg-color);
+  width: 49%;
+  height: 10%;
+  border-radius: 6px;
+}
+.day-planner-time p {
+  position: absolute;
+  top: 2%;
+}
+.day-planner-time input {
+  width: 100%;
+  padding: 0.4rem;
+  outline: none;
+  border-radius: 6px;
+  border: none;
 }
