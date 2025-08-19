@@ -109,12 +109,28 @@ function todoList() {
 todoList();
 
 let day_planner = document.querySelector(".day-planner");
+let Day_Planner_Data = JSON.parse(localStorage.getItem("DayPlan")) || {};
 
-let hours = Array.from({ length: 24 });
-hours.forEach((_elem, index) => {
-  
-  day_planner.innerHTML += `<div class="day-planner-time">
-              <p>${index}:00 - ${index+1}:00  ${index<13 ? "AM" : "PM"} </p>
-              <input type="text" placeholder="Enter your task for today " />
-            </div>`;
+let hours = Array.from(
+  { length: 24 },
+  (_elem, index) => `${index}:00 - ${index + 1}:00  ${index < 13 ? "AM" : "PM"}`
+);
+let wholeDay = "";
+hours.forEach((elem, idx) => {
+  let loacalStaredValue = Day_Planner_Data[idx] || " ";
+  wholeDay += `<div class="day-planner-time">
+  <p>${elem}</p>
+  <input class="DayPlaninput" id="${idx}" type="text" value="${loacalStaredValue}"/>
+  </div>`;
+});
+
+day_planner.innerHTML = wholeDay;
+
+let DayPlannerInput = document.querySelectorAll(".day-planner input");
+DayPlannerInput.forEach((elem) => {
+  elem.addEventListener("input", () => {
+    // console.log(elem);
+    Day_Planner_Data[elem.id] = elem.value;
+    localStorage.setItem("DayPlan", JSON.stringify(Day_Planner_Data));
+  });
 });
