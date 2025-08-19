@@ -107,3 +107,14 @@ function todoList() {
   }
 }
 todoList();
+
+let day_planner = document.querySelector(".day-planner");
+
+let hours = Array.from({ length: 24 });
+hours.forEach((_elem, index) => {
+  
+  day_planner.innerHTML += `<div class="day-planner-time">
+              <p>${index}:00 - ${index+1}:00  ${index<13 ? "AM" : "PM"} </p>
+              <input type="text" placeholder="Enter your task for today " />
+            </div>`;
+});
