@@ -107,30 +107,47 @@ function todoList() {
   }
 }
 todoList();
+function DayPlanner() {
+  let day_planner = document.querySelector(".day-planner");
+  let Day_Planner_Data = JSON.parse(localStorage.getItem("DayPlan")) || {};
 
-let day_planner = document.querySelector(".day-planner");
-let Day_Planner_Data = JSON.parse(localStorage.getItem("DayPlan")) || {};
+  let hours = Array.from(
+    { length: 24 },
+    (_elem, index) =>
+      `${index}:00 - ${index + 1}:00  ${index < 13 ? "AM" : "PM"}`
+  );
+  console.log(hours);
 
-let hours = Array.from(
-  { length: 24 },
-  (_elem, index) => `${index}:00 - ${index + 1}:00  ${index < 13 ? "AM" : "PM"}`
-);
-let wholeDay = "";
-hours.forEach((elem, idx) => {
-  let loacalStaredValue = Day_Planner_Data[idx] || " ";
-  wholeDay += `<div class="day-planner-time">
-  <p>${elem}</p>
-  <input class="DayPlaninput" id="${idx}" type="text" value="${loacalStaredValue}"/>
-  </div>`;
-});
-
-day_planner.innerHTML = wholeDay;
-
-let DayPlannerInput = document.querySelectorAll(".day-planner input");
-DayPlannerInput.forEach((elem) => {
-  elem.addEventListener("input", () => {
-    // console.log(elem);
-    Day_Planner_Data[elem.id] = elem.value;
-    localStorage.setItem("DayPlan", JSON.stringify(Day_Planner_Data));
+  let wholeDay = "";
+  hours.forEach((elem, idx) => {
+    let loacalStaredValue = Day_Planner_Data[idx] || " ";
+    wholeDay += `<div class="day-planner-time">
+    <p>${elem}</p>
+    <input class="DayPlaninput" id="${idx}" type="text" value="${loacalStaredValue}"/>
+    </div>`;
   });
-});
+
+  day_planner.innerHTML = wholeDay;
+
+  let DayPlannerInput = document.querySelectorAll(".day-planner input");
+  DayPlannerInput.forEach((elem) => {
+    elem.addEventListener("input", () => {
+      // console.log(elem);
+      Day_Planner_Data[elem.id] = elem.value;
+      localStorage.setItem("DayPlan", JSON.stringify(Day_Planner_Data));
+    });
+  });
+}
+DayPlanner();
+
+let DayName = ["sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+let days = new Date().getDay();
+document.querySelector(".date").innerHTML = `${
+  DayName[days]
+} <br>  ${new Date().getDate()}`;
+
+let value = fetch("https://api.quotable.io/random")
+  .then((response) => response.json())
+  .then((data) => {
+    document.querySelector(".motivation-2 h3").innerHTML = data.content;
+  });

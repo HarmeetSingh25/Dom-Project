@@ -258,10 +258,7 @@ img {
   max-height: 200px; /*enough to fit content */
   transform: scale(1);
 }
-.planner-page {
-  display: block;
-  /* padding: 2rem; */
-}
+
 .day-planner {
   gap: 2rem;
   padding: 1.2rem;
@@ -269,7 +266,7 @@ img {
   height: 85%;
   display: flex;
   align-items: flex-start;
-  justify-content:space-between;
+  justify-content: space-between;
   width: 100%;
   background-color: var(--third);
   flex-wrap: wrap;
@@ -301,4 +298,92 @@ img {
   border-radius: 6px;
   border: none;
   color: var(--sec);
+}
+.motivation-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.motivation-fullPage-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* background-color: rgba(128, 128, 128, 0.021); */
+  width: 25%;
+  height: 25%;
+  border-radius: 10px;
+}
+
+.motivation-fullPage-container::after {
+  filter: blur(100px);
+  scale: 1.15;
+  content: "";
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+  background-color: #8aa624;
+  z-index: 8;
+  border-radius: 10px;
+}
+.motivation-container {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  background-color: #eda35a;
+  z-index: 10;
+}
+.motivation-1 {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 10px 10px 0 0;
+  height: 40%;
+  background-color: var(--pri);
+}
+.motivation-1 h4 {
+  color: black;
+  font-size: 1.5rem;
+}
+.date {
+  color: var(--sec);
+  text-align: center;
+  padding: 0.3rem 0.5rem;
+  line-height: 1.3rem;
+  margin-top: 0.2rem;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+}
+.motivation-2 {
+  padding: 1rem;
+  background-color: #e1e9c9;
+  height: 90%;
+  border-radius: 0 0 10px 10px;
+}
+.motivation-2 h3 {
+  color: grey;
+  width: 80%;
+  letter-spacing: 1.2px;
+  font-size: 1.2rem;
+  font-family: Regular;
+  font-style: italic;
+}
+.motivation-fullPage-container #FirstQoudesImg {
+  position: absolute;
+  height: 10%;
+  right: 5%;
+  top: 15%;
+  opacity: 0.6;
+
+  width: 10%;
+}
+#secondQoudesImg {
+  position: absolute;
+  top: 260px;
+  left: 5%;
+  opacity: 0.6;
+  height: 15%;
+  width: 10%;
 }
