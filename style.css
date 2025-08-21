@@ -387,7 +387,7 @@ img {
 
 .Timer-page {
   position: relative;
-  display: block;
+  /* display: block; */
 }
 .pomo-Container {
   display: flex;
@@ -404,7 +404,7 @@ img {
   width: 30%;
   height: 60%;
   border-radius: 50%;
-  border: 1px solid black;
+  border: 1px solid rgb(186, 41, 41);
 }
 .pomo-timer h1 {
   font-size: 7.5rem;

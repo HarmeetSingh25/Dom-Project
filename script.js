@@ -153,3 +153,55 @@ function MotivationQuotes() {
     });
 }
 MotivationQuotes();
+
+// PomoDoro Timer
+let totalSecond = 1500;
+let minutes;
+let seconds;
+let pomo_timer = document.querySelector(".pomo-timer h1");
+let interval = null;
+
+function UpdateTimer() {
+  minutes = Math.floor(totalSecond / 60);
+  seconds = totalSecond % 60;
+  // console.log(minutes, seconds);
+  pomo_timer.innerHTML = `${minutes.toString().padStart(2, "0")} : ${seconds
+    .toString()
+    .padStart(2, "0")}`;
+}
+function startTimer() {
+  if (interval === null) {
+    interval = setInterval(() => {
+      totalSecond--;
+      UpdateTimer();
+      if (totalSecond <= 0) {
+        clearInterval(interval);
+        totalSecond = 1500;
+        interval = null;
+        document.querySelector(".pomo-timer h1").innerHTML = "25 : 00";
+      }
+    }, 1000);
+  }
+}
+
+document.querySelector(".start-Timer").addEventListener("click", () => {
+  startTimer();
+});
+
+function ResetTime() {
+  document.querySelector(".Reset-Timer").addEventListener("click", () => {
+    clearInterval(interval);
+    interval = null;
+    totalSecond = 1500;
+    UpdateTimer();
+  });
+}
+ResetTime();
+function PauseTimer() {
+  document.querySelector(".Pause-Timer").addEventListener("click", () => {
+    clearInterval(interval);
+    interval = null;
+    UpdateTimer();
+  });
+}
+PauseTimer();
