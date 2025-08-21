@@ -139,15 +139,17 @@ function DayPlanner() {
   });
 }
 DayPlanner();
+function MotivationQuotes() {
+  let DayName = ["sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  let days = new Date().getDay();
+  document.querySelector(".date").innerHTML = `${
+    DayName[days]
+  } <br>  ${new Date().getDate()}`;
 
-let DayName = ["sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-let days = new Date().getDay();
-document.querySelector(".date").innerHTML = `${
-  DayName[days]
-} <br>  ${new Date().getDate()}`;
-
-let value = fetch("https://api.quotable.io/random")
-  .then((response) => response.json())
-  .then((data) => {
-    document.querySelector(".motivation-2 h3").innerHTML = data.content;
-  });
+  let value = fetch("https://api.quotable.io/random")
+    .then((response) => response.json())
+    .then((data) => {
+      document.querySelector(".motivation-2 h3").innerHTML = data.content;
+    });
+}
+MotivationQuotes();
