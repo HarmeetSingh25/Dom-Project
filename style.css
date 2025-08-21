@@ -384,3 +384,43 @@ img {
   height: 15%;
   width: 10%;
 }
+
+.Timer-page {
+  position: relative;
+  display: block;
+}
+.pomo-Container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.pomo-timer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  height: 60%;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.pomo-timer h1 {
+  font-size: 7.5rem;
+}
+
+.pomo-timer button {
+  border: none;
+  color: black;
+  margin: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  padding: 0.8rem 1rem;
+  transition: 0.2s linear;
+  background-color: var(--pri);
+}
+.pomo-timer button:active {
+  box-shadow: 5px 5px 0px black;
+  scale: 0.97;
+}
