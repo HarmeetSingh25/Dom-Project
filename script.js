@@ -179,6 +179,7 @@ function startTimer() {
           IsWorkSession = false;
           clearInterval(interval);
           interval = null;
+      totalSecond = 5 * 60;
           document.querySelector(".pomo-timer h1").innerHTML = "5 : 00";
         }
       }, 1000);
