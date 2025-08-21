@@ -184,24 +184,24 @@ function startTimer() {
   }
 }
 
+function ResetTime() {
+  clearInterval(interval);
+  interval = null;
+  totalSecond = 1500;
+  UpdateTimer();
+}
+function PauseTimer() {
+  clearInterval(interval);
+  interval = null;
+  UpdateTimer();
+}
+
 document.querySelector(".start-Timer").addEventListener("click", () => {
   startTimer();
 });
-
-function ResetTime() {
-  document.querySelector(".Reset-Timer").addEventListener("click", () => {
-    clearInterval(interval);
-    interval = null;
-    totalSecond = 1500;
-    UpdateTimer();
-  });
-}
-ResetTime();
-function PauseTimer() {
-  document.querySelector(".Pause-Timer").addEventListener("click", () => {
-    clearInterval(interval);
-    interval = null;
-    UpdateTimer();
-  });
-}
-PauseTimer();
+document.querySelector(".Pause-Timer").addEventListener("click", () => {
+  PauseTimer();
+});
+document.querySelector(".Reset-Timer").addEventListener("click", () => {
+  ResetTime();
+});
