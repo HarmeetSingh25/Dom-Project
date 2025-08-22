@@ -104,6 +104,33 @@
           <h1>Pomodoro Timer</h1>
           <button id="3" class="close">Close</button>
           <div class="pomo-Container">
+            <svg class="progress-ring" width="400" height="600">
+              <!-- Background circle (faint border) -->
+              <circle
+                class="progress-ring__bg"
+                stroke="#ddd"
+                stroke-width="15"
+                fill="transparent"
+                r="250"
+                cx="1000"
+                cy="270"
+              />
+
+              <!-- Animated progress circle -->
+              <circle
+                class="progress-ring__circle"
+                stroke="red"
+                stroke-width="15"
+                fill="transparent"
+                r="250"
+                cx="1000"
+                cy="270"
+                stroke-dasharray="900"
+                stroke-dashoffset="900"
+                stroke-linecap="round"
+              />
+            </svg>
+
             <div class="pomo-timer">
               <h1>25 : 00</h1>
               <div class="button_container">

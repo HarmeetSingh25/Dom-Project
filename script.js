@@ -155,69 +155,100 @@ function MotivationQuotes() {
 MotivationQuotes();
 
 // PomoDoro Timer
-let totalSecond = 1500;
-let minutes;
-let seconds;
-let pomo_timer = document.querySelector(".pomo-timer h1");
-let IsWorkSession = true;
-var interval = null;
-function UpdateTimer() {
-  minutes = Math.floor(totalSecond / 60);
-  seconds = totalSecond % 60;
-  pomo_timer.innerHTML = `${minutes.toString().padStart(2, "0")} : ${seconds
-    .toString()
-    .padStart(2, "0")}`;
+// --- State ---
+let IsWorkSession = true; // true = work, false = break
+let sessionDuration = 25 * 60; // full length of the current session (in seconds)
+let totalSecond = sessionDuration; // remaining seconds in the current session
+let interval = null;
+
+// --- DOM ---
+const pomo_timer = document.querySelector(".pomo-timer h1");
+
+// SVG progress ring setup
+const loader = document.querySelector(".progress-ring__circle");
+const radius = loader.r.baseVal.value;
+const C = 2 * Math.PI * radius; // circumference
+loader.style.strokeDasharray = `${C} ${C}`;
+loader.style.strokeDashoffset = "0";
+
+// --- Helpers ---
+function format(val) {
+  return val.toString().padStart(2, "0");
 }
+
+function UpdateTimer() {
+  const minutes = Math.floor(totalSecond / 60);
+  const seconds = totalSecond % 60;
+  pomo_timer.innerHTML = `${format(minutes)} : ${format(seconds)}`;
+}
+
+function setProgress(remaining, duration) {
+  // remaining/duration = fraction of time left
+  const offset = C * (1 - remaining / duration);
+  loader.style.strokeDashoffset = offset;
+}
+
+function startWorkSession() {
+  IsWorkSession = true;
+  sessionDuration = 25 * 60;
+  totalSecond = sessionDuration;
+  UpdateTimer();
+  setProgress(totalSecond, sessionDuration);
+}
+
+function startBreakSession() {
+  IsWorkSession = false;
+  sessionDuration = 5 * 60;
+  totalSecond = sessionDuration;
+  UpdateTimer();
+  setProgress(totalSecond, sessionDuration);
+}
+
+// --- Controls ---
 function startTimer() {
-  if (interval === null) {
-    if (IsWorkSession) {
-      interval = setInterval(() => {
-        if (totalSecond > 0) {
-          totalSecond--;
-          UpdateTimer();
-        } else {
-          IsWorkSession = false;
-          clearInterval(interval);
-          interval = null;
-      totalSecond = 5 * 60;
-          document.querySelector(".pomo-timer h1").innerHTML = "5 : 00";
-        }
-      }, 1000);
-    } else {
-      totalSecond = 5 * 60;
-      interval = setInterval(() => {
-        if (totalSecond > 0) {
-          totalSecond--;
-          UpdateTimer();
-        } else {
-          IsWorkSession = true;
-          clearInterval(interval);
-          interval = null;
-          document.querySelector(".pomo-timer h1").innerHTML = "25 : 00";
-        }
-      }, 1000);
+  if (interval !== null) return; // prevent double start
+
+  interval = setInterval(() => {
+    if (totalSecond > 0) {
+      totalSecond--;
+      UpdateTimer();
+      setProgress(totalSecond, sessionDuration);
+      return;
     }
-  }
+
+    // session finished: stop current timer and prepare the next session
+    clearInterval(interval);
+    interval = null;
+
+    if (IsWorkSession) {
+      // switch to break
+      startBreakSession();
+    } else {
+      // switch to work
+      startWorkSession();
+    }
+  }, 1000);
+}
+
+function PauseTimer() {
+  clearInterval(interval);
+  interval = null;
+  // keep current time shown; no other changes needed
+  UpdateTimer();
+  setProgress(totalSecond, sessionDuration);
 }
 
 function ResetTime() {
   clearInterval(interval);
   interval = null;
-  totalSecond = 1500;
-  UpdateTimer();
-}
-function PauseTimer() {
-  clearInterval(interval);
-  interval = null;
-  UpdateTimer();
+  startWorkSession(); // reset to 25:00 work session
 }
 
-document.querySelector(".start-Timer").addEventListener("click", () => {
-  startTimer();
-});
-document.querySelector(".Pause-Timer").addEventListener("click", () => {
-  PauseTimer();
-});
-document.querySelector(".Reset-Timer").addEventListener("click", () => {
-  ResetTime();
-});
+// --- Event listeners ---
+document.querySelector(".start-Timer").addEventListener("click", startTimer);
+document.querySelector(".Pause-Timer").addEventListener("click", PauseTimer);
+document.querySelector(".Reset-Timer").addEventListener("click", ResetTime);
+
+// --- Initial paint ---
+UpdateTimer();
+setProgress(totalSecond, sessionDuration);
