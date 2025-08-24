@@ -49,7 +49,7 @@ function todoList() {
   // 🔹 Function to render tasks from localStorage
   function renderTasks() {
     Taskhold.innerHTML = ""; // clear UI
-    currentTask.forEach((task, index) => {
+    currentTask.forEach((task) => {
       Taskhold.innerHTML += `
       <div class="task">
       <h4>${task.Task} <span class="imp" style="display:${
@@ -154,101 +154,128 @@ function MotivationQuotes() {
 }
 MotivationQuotes();
 
-// PomoDoro Timer
-// --- State ---
-let IsWorkSession = true; // true = work, false = break
-let sessionDuration = 25 * 60; // full length of the current session (in seconds)
-let totalSecond = sessionDuration; // remaining seconds in the current session
-let interval = null;
+function PomoDoroTimer() {
+  // PomoDoro Timer
+  // --- State ---
+  let IsWorkSession = true; // true = work, false = break
+  let sessionDuration = 25 * 60; // full length of the current session (in seconds)
+  let totalSecond = sessionDuration; // remaining seconds in the current session
+  let interval = null;
 
-// --- DOM ---
-const pomo_timer = document.querySelector(".pomo-timer h1");
+  // --- DOM ---
+  const pomo_timer = document.querySelector(".pomo-timer h1");
 
-// SVG progress ring setup
-const loader = document.querySelector(".progress-ring__circle");
-const radius = loader.r.baseVal.value;
-const C = 2 * Math.PI * radius; // circumference
-loader.style.strokeDasharray = `${C} ${C}`;
-loader.style.strokeDashoffset = "0";
+  // SVG progress ring setup
+  const loader = document.querySelector(".progress-ring__circle");
+  const radius = loader.r.baseVal.value;
+  const C = 2 * Math.PI * radius; // circumference
+  loader.style.strokeDasharray = `${C} ${C}`;
+  loader.style.strokeDashoffset = "0";
 
-// --- Helpers ---
-function format(val) {
-  return val.toString().padStart(2, "0");
-}
+  // --- Helpers ---
+  function format(val) {
+    return val.toString().padStart(2, "0");
+  }
 
-function UpdateTimer() {
-  const minutes = Math.floor(totalSecond / 60);
-  const seconds = totalSecond % 60;
-  pomo_timer.innerHTML = `${format(minutes)} : ${format(seconds)}`;
-}
+  function UpdateTimer() {
+    const minutes = Math.floor(totalSecond / 60);
+    const seconds = totalSecond % 60;
+    pomo_timer.innerHTML = `${format(minutes)} : ${format(seconds)}`;
+  }
 
-function setProgress(remaining, duration) {
-  // remaining/duration = fraction of time left
-  const offset = C * (1 - remaining / duration);
-  loader.style.strokeDashoffset = offset;
-}
+  function setProgress(remaining, duration) {
+    // remaining/duration = fraction of time left
+    const offset = C * (1 - remaining / duration);
+    loader.style.strokeDashoffset = offset;
+  }
 
-function startWorkSession() {
-  IsWorkSession = true;
-  sessionDuration = 25 * 60;
-  totalSecond = sessionDuration;
-  UpdateTimer();
-  setProgress(totalSecond, sessionDuration);
-}
+  function startWorkSession() {
+    IsWorkSession = true;
+    sessionDuration = 25 * 60;
+    totalSecond = sessionDuration;
+    UpdateTimer();
+    setProgress(totalSecond, sessionDuration);
+  }
 
-function startBreakSession() {
-  IsWorkSession = false;
-  sessionDuration = 5 * 60;
-  totalSecond = sessionDuration;
-  UpdateTimer();
-  setProgress(totalSecond, sessionDuration);
-}
+  function startBreakSession() {
+    IsWorkSession = false;
+    sessionDuration = 5 * 60;
+    totalSecond = sessionDuration;
+    UpdateTimer();
+    setProgress(totalSecond, sessionDuration);
+  }
 
-// --- Controls ---
-function startTimer() {
-  if (interval !== null) return; // prevent double start
+  // --- Controls ---
+  function startTimer() {
+    if (interval !== null) return; // prevent double start
 
-  interval = setInterval(() => {
-    if (totalSecond > 0) {
-      totalSecond--;
-      UpdateTimer();
-      setProgress(totalSecond, sessionDuration);
-      return;
-    }
+    interval = setInterval(() => {
+      if (totalSecond > 0) {
+        totalSecond--;
+        UpdateTimer();
+        setProgress(totalSecond, sessionDuration);
+        return;
+      }
 
-    // session finished: stop current timer and prepare the next session
+      // session finished: stop current timer and prepare the next session
+      clearInterval(interval);
+      interval = null;
+
+      if (IsWorkSession) {
+        // switch to break
+        startBreakSession();
+      } else {
+        // switch to work
+        startWorkSession();
+      }
+    }, 1000);
+  }
+
+  function PauseTimer() {
     clearInterval(interval);
     interval = null;
+    // keep current time shown; no other changes needed
+    UpdateTimer();
+    setProgress(totalSecond, sessionDuration);
+  }
 
-    if (IsWorkSession) {
-      // switch to break
-      startBreakSession();
-    } else {
-      // switch to work
-      startWorkSession();
-    }
-  }, 1000);
-}
+  function ResetTime() {
+    clearInterval(interval);
+    interval = null;
+    startWorkSession(); // reset to 25:00 work session
+  }
 
-function PauseTimer() {
-  clearInterval(interval);
-  interval = null;
-  // keep current time shown; no other changes needed
+  // --- Event listeners ---
+  document.querySelector(".start-Timer").addEventListener("click", startTimer);
+  document.querySelector(".Pause-Timer").addEventListener("click", PauseTimer);
+  document.querySelector(".Reset-Timer").addEventListener("click", ResetTime);
+
+  // --- Initial paint ---
   UpdateTimer();
   setProgress(totalSecond, sessionDuration);
 }
+function DailyGoal() {
+  let GoalArray = [];
+  function TodayDate() {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, "0");
+    let day = date.getDate().toString().padStart(2, "0");
+    let fullDate = `${year}-${month}-${day}`;
+    let Goal_page = document.querySelector(".Date p");
+    Goal_page.textContent = fullDate;
+  }
+  TodayDate();
+  let Goal_input = document.getElementById("Goal_input");
+  let goal_Add_Btn = document.getElementById("goal_Add");
+  let Goal_holder = document.querySelector(".Goal_holder");
+  let checkedInput = document.querySelector(".checkBox_GoalName input");
+  goal_Add_Btn.addEventListener("click", () => {
+    let Goal_input_value = Goal_input.value;
+    console.log(checkedInput.checked , Goal_input_value);
 
-function ResetTime() {
-  clearInterval(interval);
-  interval = null;
-  startWorkSession(); // reset to 25:00 work session
+    Goal_input.value = "";
+  });
 }
 
-// --- Event listeners ---
-document.querySelector(".start-Timer").addEventListener("click", startTimer);
-document.querySelector(".Pause-Timer").addEventListener("click", PauseTimer);
-document.querySelector(".Reset-Timer").addEventListener("click", ResetTime);
-
-// --- Initial paint ---
-UpdateTimer();
-setProgress(totalSecond, sessionDuration);
+DailyGoal();
