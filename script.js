@@ -118,7 +118,7 @@ function DayPlanner() {
     (_elem, index) =>
       `${index}:00 - ${index + 1}:00  ${index < 13 ? "AM" : "PM"}`
   );
-  console.log(hours);
+  // console.log(hours);
 
   let wholeDay = "";
   hours.forEach((elem, idx) => {
@@ -258,57 +258,80 @@ function PomoDoroTimer() {
 }
 function DailyGoal() {
   let GoalArray = [];
+  let date = TodayDate();
   function TodayDate() {
     let date = new Date();
     let year = date.getFullYear();
     let month = (date.getMonth() + 1).toString().padStart(2, "0");
     let day = date.getDate().toString().padStart(2, "0");
     let fullDate = `${year}-${month}-${day}`;
+    ``;
     let Goal_page = document.querySelector(".Date p");
     Goal_page.textContent = fullDate;
+    return fullDate;
   }
-  TodayDate();
-  function RenderData(e) {
+  function RenderData(InputValue, checkBoxValue) {
     let Goal = document.createElement("div");
     Goal.className = "Goal";
 
     let checkBox_GoalName = document.createElement("div");
     checkBox_GoalName.className = "checkBox_GoalName";
-    let label = document.createElement("label");
+
+    // let label = document.createElement("label");
     let checkBox = document.createElement("input");
+    checkBox.type = "checkbox";
+    checkBox.className = "GoalCheckBox";
+    if (checkBoxValue === true) {
+      checkBox.checked = true;
+    } else {
+      checkBox.checked = false;
+    }
 
     let paragraph = document.createElement("p");
-    paragraph.textContent = `${e}`;
-    checkBox.type = "checkbox";
-    label.appendChild(checkBox);
-    checkBox_GoalName.appendChild(label);
+    paragraph.textContent = `${InputValue}`;
+
+    checkBox_GoalName.appendChild(checkBox);
     checkBox_GoalName.appendChild(paragraph);
 
     let Goal_edit_delete = document.createElement("div");
     Goal_edit_delete.className = "Goal_edit_delete";
+
     let EditButton = document.createElement("button");
+    EditButton.textContent = "🖋️";
+
     let DltButton = document.createElement("button");
+    DltButton.textContent = "🗑️";
     Goal_edit_delete.appendChild(EditButton);
     Goal_edit_delete.appendChild(DltButton);
     Goal.appendChild(checkBox_GoalName);
     Goal.appendChild(Goal_edit_delete);
 
-    console.log(Goal);
+    // console.log(Goal);
     return Goal;
   }
-  // RenderData();
   function SendingToArrayData() {
     let Goal_holder = document.querySelector(".Goal_holder");
     let Goal_input = document.getElementById("Goal_input");
     let goal_Add_Btn = document.getElementById("goal_Add");
-    let ImpcheckedInput = document.querySelector(".checkBox_GoalName input");
+    let ImpcheckedInput = document.querySelector("#importantToggle");
+
     goal_Add_Btn.addEventListener("click", () => {
+      let importantToggleValue = ImpcheckedInput.checked;
+      console.log(importantToggleValue);
+
       const text = Goal_input.value.trim();
       if (!text) return;
-      Goal_holder.appendChild(RenderData(text)); // ⬅️ append the element
+      Goal_holder.appendChild(RenderData(text, importantToggleValue)); // ⬅️ append the element
+      console.log(document.querySelectorAll(".Goal"));
+      GoalArray.push({
+        date: date,
+        InputValue: Goal_input.value,
+        ImpGoal: ImpcheckedInput.checked,
+      });
+      console.log(GoalArray);
       Goal_input.value = "";
       Goal_input.focus();
-  
+      ImpcheckedInput.checked = false;
     });
   }
   SendingToArrayData();
