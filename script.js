@@ -1,3 +1,5 @@
+// const { createElement } = require("react");
+
 function OpenClsoePage() {
   let Cards = document.querySelectorAll(".elem");
   let Cards_FullPages = document.querySelectorAll(".fullPage");
@@ -266,16 +268,50 @@ function DailyGoal() {
     Goal_page.textContent = fullDate;
   }
   TodayDate();
-  let Goal_input = document.getElementById("Goal_input");
-  let goal_Add_Btn = document.getElementById("goal_Add");
-  let Goal_holder = document.querySelector(".Goal_holder");
-  let checkedInput = document.querySelector(".checkBox_GoalName input");
-  goal_Add_Btn.addEventListener("click", () => {
-    let Goal_input_value = Goal_input.value;
-    console.log(checkedInput.checked , Goal_input_value);
+  function RenderData(e) {
+    let Goal = document.createElement("div");
+    Goal.className = "Goal";
 
-    Goal_input.value = "";
-  });
+    let checkBox_GoalName = document.createElement("div");
+    checkBox_GoalName.className = "checkBox_GoalName";
+    let label = document.createElement("label");
+    let checkBox = document.createElement("input");
+
+    let paragraph = document.createElement("p");
+    paragraph.textContent = `${e}`;
+    checkBox.type = "checkbox";
+    label.appendChild(checkBox);
+    checkBox_GoalName.appendChild(label);
+    checkBox_GoalName.appendChild(paragraph);
+
+    let Goal_edit_delete = document.createElement("div");
+    Goal_edit_delete.className = "Goal_edit_delete";
+    let EditButton = document.createElement("button");
+    let DltButton = document.createElement("button");
+    Goal_edit_delete.appendChild(EditButton);
+    Goal_edit_delete.appendChild(DltButton);
+    Goal.appendChild(checkBox_GoalName);
+    Goal.appendChild(Goal_edit_delete);
+
+    console.log(Goal);
+    return Goal;
+  }
+  // RenderData();
+  function SendingToArrayData() {
+    let Goal_holder = document.querySelector(".Goal_holder");
+    let Goal_input = document.getElementById("Goal_input");
+    let goal_Add_Btn = document.getElementById("goal_Add");
+    let ImpcheckedInput = document.querySelector(".checkBox_GoalName input");
+    goal_Add_Btn.addEventListener("click", () => {
+      const text = Goal_input.value.trim();
+      if (!text) return;
+      Goal_holder.appendChild(RenderData(text)); // ⬅️ append the element
+      Goal_input.value = "";
+      Goal_input.focus();
+  
+    });
+  }
+  SendingToArrayData();
 }
 
 DailyGoal();
