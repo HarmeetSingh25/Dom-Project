@@ -277,21 +277,13 @@ function DailyGoal() {
     let checkBox_GoalName = document.createElement("div");
     checkBox_GoalName.className = "checkBox_GoalName";
 
-    // let label = document.createElement("label");
-    let checkBox = document.createElement("input");
-    checkBox.type = "checkbox";
-    checkBox.className = "GoalCheckBox";
-    if (checkBoxValue === true) {
-      checkBox.checked = true;
-    } else {
-      checkBox.checked = false;
-    }
-
+    let span = document.createElement("span");
+    checkBoxValue ? (span.textContent = "⭐") : (span.textContent = "");
     let paragraph = document.createElement("p");
     paragraph.textContent = `${InputValue}`;
 
-    checkBox_GoalName.appendChild(checkBox);
     checkBox_GoalName.appendChild(paragraph);
+    checkBox_GoalName.appendChild(span);
 
     let Goal_edit_delete = document.createElement("div");
     Goal_edit_delete.className = "Goal_edit_delete";
