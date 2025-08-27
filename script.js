@@ -152,7 +152,7 @@ function MotivationQuotes() {
       document.querySelector(".motivation-2 h3").textContent = data.content;
     });
 }
-// MotivationQuotes();
+MotivationQuotes();
 
 function PomoDoroTimer() {
   // PomoDoro Timer
@@ -255,6 +255,7 @@ function PomoDoroTimer() {
   setProgress(totalSecond, sessionDuration);
 }
 function DailyGoal() {
+  function DarkLightMode() {   }
   let GoalArray = [];
   // if (localStorage.getItem("Goal")) {
   //   GoalArray = JSON.parse(localStorage.getItem("Goal"));
@@ -459,7 +460,6 @@ function DailyGoal() {
     }
   }
 
-  EditGoal();
   localStorage.clear();
 }
 DailyGoal();
