@@ -498,8 +498,10 @@ svg {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  overflow: auto;
 }
 .Goal {
+  width: 100%;
   background-color: var(--third);
   gap: 1rem;
   padding: 0.5rem 1rem;
@@ -514,7 +516,8 @@ svg {
   gap: 0.5rem;
 }
 .checkBox_GoalName input {
-  width: 20px;
+  color: var(--sec);
+  width: 50%;
 }
 .checkBox_GoalName h1 {
   width: 100%;

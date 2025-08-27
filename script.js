@@ -1,5 +1,3 @@
-// const { createElement } = require("react");
-
 function OpenClsoePage() {
   let Cards = document.querySelectorAll(".elem");
   let Cards_FullPages = document.querySelectorAll(".fullPage");
@@ -151,10 +149,10 @@ function MotivationQuotes() {
   let value = fetch("https://api.quotable.io/random")
     .then((response) => response.json())
     .then((data) => {
-      document.querySelector(".motivation-2 h3").innerHTML = data.content;
+      document.querySelector(".motivation-2 h3").textContent = data.content;
     });
 }
-MotivationQuotes();
+// MotivationQuotes();
 
 function PomoDoroTimer() {
   // PomoDoro Timer
@@ -258,6 +256,10 @@ function PomoDoroTimer() {
 }
 function DailyGoal() {
   let GoalArray = [];
+  // if (localStorage.getItem("Goal")) {
+  //   GoalArray = JSON.parse(localStorage.getItem("Goal"));
+  //   console.log(GoalArray);
+  // }
   let date = TodayDate();
   function TodayDate() {
     let date = new Date();
@@ -265,22 +267,24 @@ function DailyGoal() {
     let month = (date.getMonth() + 1).toString().padStart(2, "0");
     let day = date.getDate().toString().padStart(2, "0");
     let fullDate = `${year}-${month}-${day}`;
-    ``;
     let Goal_page = document.querySelector(".Date p");
     Goal_page.textContent = fullDate;
     return fullDate;
   }
-  function RenderData(InputValue, checkBoxValue) {
+  function RenderData(goal) {
     let Goal = document.createElement("div");
     Goal.className = "Goal";
+    Goal.dataset.id = goal.id;
 
     let checkBox_GoalName = document.createElement("div");
     checkBox_GoalName.className = "checkBox_GoalName";
 
     let span = document.createElement("span");
-    checkBoxValue ? (span.textContent = "⭐") : (span.textContent = "");
+    goal.importantToggleValue
+      ? (span.textContent = "⭐")
+      : (span.textContent = "");
     let paragraph = document.createElement("p");
-    paragraph.textContent = `${InputValue}`;
+    paragraph.textContent = goal.text;
 
     checkBox_GoalName.appendChild(paragraph);
     checkBox_GoalName.appendChild(span);
@@ -289,9 +293,11 @@ function DailyGoal() {
     Goal_edit_delete.className = "Goal_edit_delete";
 
     let EditButton = document.createElement("button");
+    EditButton.className = "EditGoal";
     EditButton.textContent = "🖋️";
 
     let DltButton = document.createElement("button");
+    DltButton.className = "DltButton";
     DltButton.textContent = "🗑️";
     Goal_edit_delete.appendChild(EditButton);
     Goal_edit_delete.appendChild(DltButton);
@@ -309,24 +315,134 @@ function DailyGoal() {
 
     goal_Add_Btn.addEventListener("click", () => {
       let importantToggleValue = ImpcheckedInput.checked;
-      console.log(importantToggleValue);
+      // console.log(importantToggleValue);
 
       const text = Goal_input.value.trim();
       if (!text) return;
-      Goal_holder.appendChild(RenderData(text, importantToggleValue)); // ⬅️ append the element
-      console.log(document.querySelectorAll(".Goal"));
-      GoalArray.push({
-        date: date,
-        InputValue: Goal_input.value,
-        ImpGoal: ImpcheckedInput.checked,
-      });
-      console.log(GoalArray);
+      let GoalData = {
+        id: Date.now(),
+        text,
+        importantToggleValue,
+        date,
+      };
+      Goal_holder.appendChild(RenderData(GoalData)); // ⬅️ append the element
+      // console.log(document.querySelectorAll(".Goal"));
+      GoalArray.push(GoalData);
+      // localStorage.setItem("Goal", JSON.stringify(GoalArray));
+      // console.log(GoalArray);
+      // localStorage.setItem("Goal", JSON.stringify(GoalArray));
+      // if (localStorage.getItem("Goal")) {
+      //   GoalArray = JSON.parse(localStorage.getItem("Goal"));
+      // }
+
       Goal_input.value = "";
       Goal_input.focus();
       ImpcheckedInput.checked = false;
     });
   }
   SendingToArrayData();
-}
+  function dltGoal() {
+    const Goal_holder = document.querySelector(".Goal_holder");
 
+    Goal_holder.addEventListener("click", (e) => {
+      const dltBtn = e.target.closest(".DltButton");
+      if (!dltBtn) return;
+      // console.log(dltBtn);
+
+      const row = dltBtn.closest(".Goal");
+      // console.log(row.dataset.id);
+
+      if (!row) return;
+
+      // 2) remove from state
+      const idx = GoalArray.findIndex((g) => String(g.id) === row.dataset.id);
+      console.log(idx);
+
+      if (idx > -1) {
+        GoalArray.splice(idx, 1);
+        // localStorage.setItem("Goal", JSON.stringify(GoalArray)); // if persisting
+      }
+
+      // 3) now remove from DOM
+      row.remove();
+      console.log(GoalArray);
+    });
+  }
+  dltGoal();
+  function EditGoal() {
+    const Goal_holder = document.querySelector(".Goal_holder");
+    Goal_holder.addEventListener("click", (e) => {
+      let row = e.target.closest(".Goal");
+      if (!row) return;
+      console.log(row);
+
+      if (e.target.closest(".EditGoal")) {
+        let left = row.querySelector(".checkBox_GoalName");
+        let p = left.querySelector("p");
+        if (!p) return;
+
+        let input = document.createElement("input");
+        input.className = "GoalEditInput";
+        input.type = "text";
+        input.value = p.textContent;
+        input.dataset.GoalValue = p.textContent;
+
+        p.replaceWith(input);
+        input.select();
+        input.focus();
+
+        let Goal_edit_delete = row.querySelector(".Goal_edit_delete");
+        console.log(Goal_edit_delete);
+        let EditBtn = Goal_edit_delete.querySelector(".EditGoal");
+        let DltBtn = Goal_edit_delete.querySelector(".DltButton");
+        EditBtn.style.display = "none";
+        DltBtn.style.display = "none";
+
+        let SaveBtn = document.createElement("button");
+        SaveBtn.className = "SaveBtn";
+        let CancelBtn = document.createElement("button");
+        CancelBtn.className = "CancelBtn";
+
+        SaveBtn.textContent = "✔️";
+        CancelBtn.textContent = "❌";
+        Goal_edit_delete.append(SaveBtn, CancelBtn);
+
+        input.addEventListener("keydown", (ev) => {
+          console.log(ev.key);
+
+          if (ev.key === "Enter") {
+            SaveGoal(row);
+          }
+        });
+        return;
+      }
+      if (e.target.closest(".SaveBtn")) {
+        SaveGoal(row);
+        return;
+      }
+    });
+    function SaveGoal(Goal) {
+      // console.log("RUn SaveGoal");
+
+      let left = Goal.querySelector(".checkBox_GoalName");
+      let input = left.querySelector(".GoalEditInput");
+      if (!input) return;
+
+      let newText = input.value.trim();
+      let FinalText = newText || input.dataset.GoalValue;
+      let paragraph = document.createElement("p");
+      paragraph.textContent = FinalText;
+      input.replaceWith(paragraph);
+
+      const actions = Goal.querySelector(".Goal_edit_delete");
+      actions.querySelector(".EditGoal").style.display = "block";
+      actions.querySelector(".DltButton").style.display = "block";
+      actions.querySelector(".CancelBtn")?.remove();
+      actions.querySelector(".SaveBtn")?.remove();
+    }
+  }
+
+  EditGoal();
+  localStorage.clear();
+}
 DailyGoal();
