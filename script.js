@@ -408,10 +408,13 @@ function DailyGoal() {
         Goal_edit_delete.append(SaveBtn, CancelBtn);
 
         input.addEventListener("keydown", (ev) => {
-          console.log(ev.key);
+          // console.log(ev.key);
 
           if (ev.key === "Enter") {
             SaveGoal(row);
+          }
+          if (ev.key === "Escape") {
+            CanceEditGoal(row);
           }
         });
         return;
@@ -422,8 +425,6 @@ function DailyGoal() {
       }
     });
     function SaveGoal(Goal) {
-      // console.log("RUn SaveGoal");
-
       let left = Goal.querySelector(".checkBox_GoalName");
       let input = left.querySelector(".GoalEditInput");
       if (!input) return;
@@ -439,6 +440,22 @@ function DailyGoal() {
       actions.querySelector(".DltButton").style.display = "block";
       actions.querySelector(".CancelBtn")?.remove();
       actions.querySelector(".SaveBtn")?.remove();
+    }
+    function CanceEditGoal(Goal) {
+      let left = Goal.querySelector(".checkBox_GoalName");
+      let GoalEditInput = left.querySelector(".GoalEditInput");
+
+      let p = document.querySelector("p");
+      p.textContent = GoalEditInput.dataset.GoalValue;
+      GoalEditInput.replaceWith(p);
+
+      let Goal_edit_delete = Goal.querySelector(".Goal_edit_delete");
+
+      Goal_edit_delete.querySelector(".SaveBtn")?.remove();
+      Goal_edit_delete.querySelector(".CancelBtn")?.remove();
+
+      Goal_edit_delete.querySelector(".DltButton").style.display = "block";
+      Goal_edit_delete.querySelector(".EditGoal").style.display = "block";
     }
   }
 
