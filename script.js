@@ -140,19 +140,31 @@ function DayPlanner() {
 }
 DayPlanner();
 function MotivationQuotes() {
-  let DayName = ["sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  let days = new Date().getDay();
-  document.querySelector(".date").innerHTML = `${
-    DayName[days]
-  } <br>  ${new Date().getDate()}`;
+  const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const now = new Date();
+  const dateEl  = document.querySelector(".date");
+  const quoteEl = document.querySelector(".motivation-2 h3");
 
-  let value = fetch("https://api.quotable.io/random")
-    .then((response) => response.json())
-    .then((data) => {
-      document.querySelector(".motivation-2 h3").textContent = data.content;
+  if (dateEl) dateEl.innerHTML = `${dayNames[now.getDay()]} <br> ${now.getDate()}`;
+  if (!quoteEl) return;
+
+  fetch("https://dummyjson.com/quotes/random")
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(data => {
+      quoteEl.textContent = data.quote || "Keep going. You’ve got this!";
+    })
+    .catch(err => {
+      console.error("Quote fetch failed:", err);
+      quoteEl.textContent = "Small steps every day.";
     });
 }
-MotivationQuotes();
+
+// Ensure it runs after the DOM is ready:
+window.addEventListener("DOMContentLoaded", MotivationQuotes);
+
 
 function PomoDoroTimer() {
   // PomoDoro Timer
@@ -255,7 +267,7 @@ function PomoDoroTimer() {
   setProgress(totalSecond, sessionDuration);
 }
 function DailyGoal() {
-  function DarkLightMode() {   }
+  function DarkLightMode() {}
   let GoalArray = [];
   // if (localStorage.getItem("Goal")) {
   //   GoalArray = JSON.parse(localStorage.getItem("Goal"));
@@ -460,6 +472,6 @@ function DailyGoal() {
     }
   }
 
-  localStorage.clear();
+  // localStorage.clear();
 }
 DailyGoal();
