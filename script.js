@@ -476,7 +476,7 @@ function DailyGoal() {
       Goal_edit_delete.querySelector(".DltButton").style.display = "block";
       Goal_edit_delete.querySelector(".EditGoal").style.display = "block";
     }
-    CanceEditGoal()
+    // CanceEditGoal()
   }
 EditGoal()
   // localStorage.clear();
