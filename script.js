@@ -144,6 +144,7 @@ function MotivationQuotes() {
   const now = new Date();
   const dateEl  = document.querySelector(".date");
   const quoteEl = document.querySelector(".motivation-2 h3");
+// console.log(getDay);
 
   if (dateEl) dateEl.innerHTML = `${dayNames[now.getDay()]} <br> ${now.getDate()}`;
   if (!quoteEl) return;
@@ -266,6 +267,7 @@ function PomoDoroTimer() {
   UpdateTimer();
   setProgress(totalSecond, sessionDuration);
 }
+PomoDoroTimer()
 function DailyGoal() {
   function DarkLightMode() {}
   let GoalArray = [];
@@ -432,6 +434,10 @@ function DailyGoal() {
         });
         return;
       }
+      if (e.target.closest(".CancelBtn")) {
+        CanceEditGoal(row);
+        return;
+      }
       if (e.target.closest(".SaveBtn")) {
         SaveGoal(row);
         return;
@@ -470,8 +476,9 @@ function DailyGoal() {
       Goal_edit_delete.querySelector(".DltButton").style.display = "block";
       Goal_edit_delete.querySelector(".EditGoal").style.display = "block";
     }
+    CanceEditGoal()
   }
-
+EditGoal()
   // localStorage.clear();
 }
 DailyGoal();
