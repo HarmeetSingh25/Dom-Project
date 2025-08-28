@@ -140,24 +140,25 @@ function DayPlanner() {
 }
 DayPlanner();
 function MotivationQuotes() {
-  const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const now = new Date();
-  const dateEl  = document.querySelector(".date");
+  const dateEl = document.querySelector(".date");
   const quoteEl = document.querySelector(".motivation-2 h3");
-// console.log(getDay);
+  // console.log(getDay);
 
-  if (dateEl) dateEl.innerHTML = `${dayNames[now.getDay()]} <br> ${now.getDate()}`;
+  if (dateEl)
+    dateEl.innerHTML = `${dayNames[now.getDay()]} <br> ${now.getDate()}`;
   if (!quoteEl) return;
 
   fetch("https://dummyjson.com/quotes/random")
-    .then(r => {
+    .then((r) => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return r.json();
     })
-    .then(data => {
+    .then((data) => {
       quoteEl.textContent = data.quote || "Keep going. You’ve got this!";
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("Quote fetch failed:", err);
       quoteEl.textContent = "Small steps every day.";
     });
@@ -165,7 +166,6 @@ function MotivationQuotes() {
 
 // Ensure it runs after the DOM is ready:
 window.addEventListener("DOMContentLoaded", MotivationQuotes);
-
 
 function PomoDoroTimer() {
   // PomoDoro Timer
@@ -267,18 +267,26 @@ function PomoDoroTimer() {
   UpdateTimer();
   setProgress(totalSecond, sessionDuration);
 }
-PomoDoroTimer()
+PomoDoroTimer();
 function DailyGoal() {
-  function DarkLightMode() {}
+ 
   let GoalArray = [];
-  // if (localStorage.getItem("Goal")) {
-  //   GoalArray = JSON.parse(localStorage.getItem("Goal"));
-  //   console.log(GoalArray);
-  // }
+  if (localStorage.getItem("Goal")) {
+    GoalArray = JSON.parse(localStorage.getItem("Goal"));
+    console.log();
+    let Goal_holder = document.querySelector(".Goal_holder");
+    Goal_holder.innerHTML = "";
+    GoalArray.forEach((Goal) => {
+      Goal_holder.appendChild(RenderData(Goal));
+    });
+  }
+
   let date = TodayDate();
+
   function TodayDate() {
     let date = new Date();
     let year = date.getFullYear();
+
     let month = (date.getMonth() + 1).toString().padStart(2, "0");
     let day = date.getDate().toString().padStart(2, "0");
     let fullDate = `${year}-${month}-${day}`;
@@ -286,6 +294,8 @@ function DailyGoal() {
     Goal_page.textContent = fullDate;
     return fullDate;
   }
+
+
   function RenderData(goal) {
     let Goal = document.createElement("div");
     Goal.className = "Goal";
@@ -322,40 +332,41 @@ function DailyGoal() {
     // console.log(Goal);
     return Goal;
   }
+
+
   function SendingToArrayData() {
     let Goal_holder = document.querySelector(".Goal_holder");
     let Goal_input = document.getElementById("Goal_input");
     let goal_Add_Btn = document.getElementById("goal_Add");
     let ImpcheckedInput = document.querySelector("#importantToggle");
-
+    
     goal_Add_Btn.addEventListener("click", () => {
       let importantToggleValue = ImpcheckedInput.checked;
       // console.log(importantToggleValue);
-
+      
       const text = Goal_input.value.trim();
       if (!text) return;
       let GoalData = {
         id: Date.now(),
         text,
         importantToggleValue,
-        date,
+        date: TodayDate(),
       };
       Goal_holder.appendChild(RenderData(GoalData)); // ⬅️ append the element
       // console.log(document.querySelectorAll(".Goal"));
+      ResetGoal(date);
       GoalArray.push(GoalData);
-      // localStorage.setItem("Goal", JSON.stringify(GoalArray));
-      // console.log(GoalArray);
-      // localStorage.setItem("Goal", JSON.stringify(GoalArray));
-      // if (localStorage.getItem("Goal")) {
-      //   GoalArray = JSON.parse(localStorage.getItem("Goal"));
-      // }
-
+      localStorage.setItem("Goal", JSON.stringify(GoalArray));
       Goal_input.value = "";
       Goal_input.focus();
       ImpcheckedInput.checked = false;
     });
   }
+
+
   SendingToArrayData();
+
+
   function dltGoal() {
     const Goal_holder = document.querySelector(".Goal_holder");
 
@@ -375,7 +386,7 @@ function DailyGoal() {
 
       if (idx > -1) {
         GoalArray.splice(idx, 1);
-        // localStorage.setItem("Goal", JSON.stringify(GoalArray)); // if persisting
+        localStorage.setItem("Goal", JSON.stringify(GoalArray)); // if persisting
       }
 
       // 3) now remove from DOM
@@ -383,6 +394,8 @@ function DailyGoal() {
       console.log(GoalArray);
     });
   }
+
+
   dltGoal();
   function EditGoal() {
     const Goal_holder = document.querySelector(".Goal_holder");
@@ -454,6 +467,13 @@ function DailyGoal() {
       paragraph.textContent = FinalText;
       input.replaceWith(paragraph);
 
+      const id = Goal.dataset.id;
+      const idx = GoalArray.findIndex((g) => String(g.id) === String(id));
+      if (idx > -1) {
+        GoalArray[idx].text = FinalText;
+        localStorage.setItem("Goal", JSON.stringify(GoalArray));
+      }
+
       const actions = Goal.querySelector(".Goal_edit_delete");
       actions.querySelector(".EditGoal").style.display = "block";
       actions.querySelector(".DltButton").style.display = "block";
@@ -478,7 +498,30 @@ function DailyGoal() {
     }
     // CanceEditGoal()
   }
-EditGoal()
+
+
+  EditGoal();
+
+
+
+  function ResetGoal(date) {
+    const last = JSON.parse(localStorage.getItem("Goal"));
+    // console.log(last);
+    let Dates = new Date();
+    let year = Dates.getFullYear();
+    let month = (Dates.getMonth() + 1).toString().padStart(2, "0");
+    let Day = Dates.getDate().toString().padStart(2, "0");
+    let Fulldate = `${year}-${month}-${Day}`;
+    if (date !== Fulldate) {
+      let Goal_holder = document.querySelector(".Goal_holder");
+      if (!Goal_holder.querySelector(".Goal")) return;
+      let Goal = Goal_holder.querySelectorAll(".Goal");
+      // console.log(Goal);
+      Goal_holder.querySelectorAll(".Goal").forEach((goal) => {});
+    }
+  }
+
+   
   // localStorage.clear();
 }
 DailyGoal();
