@@ -287,6 +287,8 @@ function DailyGoal() {
   function TodayDate() {
     let date = new Date();
     let year = date.getFullYear();
+    let hours = date.getHours();
+    console.log(hours);
 
     let month = (date.getMonth() + 1).toString().padStart(2, "0");
     let day = date.getDate().toString().padStart(2, "0");
@@ -452,7 +454,7 @@ function DailyGoal() {
       }
     });
   }
-
+  EditGoal();
   function SaveGoal(Goal) {
     let left = Goal.querySelector(".checkBox_GoalName");
     let input = left.querySelector(".GoalEditInput");
@@ -495,7 +497,7 @@ function DailyGoal() {
     Goal_edit_delete.querySelector(".EditGoal").style.display = "block";
   }
 
-    function ResetGoal() {
+  function ResetGoal() {
     const last = JSON.parse(localStorage.getItem("Goal", GoalArray));
     let getDate = new Date();
     let Year = getDate.getFullYear();
@@ -513,7 +515,43 @@ function DailyGoal() {
     }
   }
   ResetGoal();
-
-
 }
 DailyGoal();
+
+function TimerWeather() {
+  let Day_city = document.querySelector(".Day_city h1");
+  let date = new Date();
+  let WeeksDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thusday",
+    "Friday",
+    "Saturday",
+  ];
+  let Day = WeeksDays[date.getDay()];
+  let Hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+  let Minutes = date.getMinutes();
+  let seconds = date.getSeconds();
+  Day_city.textContent = `${Day}--${Hours}:${Minutes.toString().padStart(
+    2,
+    "0"
+  )}:${seconds.toString().padStart(2, "0")}  ${Hours > 12 ? "PM" : "AM"}`;
+}
+TimerWeather()
+
+setInterval(() => {
+  TimerWeather();
+}, 1000);
+let data = null;
+async function WeatherApi() {
+  var response = await fetch(
+    `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`
+  );
+
+  let data = await Response.json();
+  console.log(data);
+}
+
+WeatherApi();
