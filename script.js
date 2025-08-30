@@ -1,12 +1,13 @@
 function OpenClsoePage() {
   let Cards = document.querySelectorAll(".elem");
   let Cards_FullPages = document.querySelectorAll(".fullPage");
-
+  let Status_Container = document.querySelector(".Status-Container");
   // Show full card
   function fullCardPageDisplay() {
     Cards.forEach((elem) => {
       elem.addEventListener("click", () => {
         Cards_FullPages[elem.id].style.display = "block";
+        Status_Container.style.display = "none";
       });
     });
   }
@@ -18,6 +19,7 @@ function OpenClsoePage() {
     close_btn.forEach((button, index) => {
       button.addEventListener("click", () => {
         Cards_FullPages[index].style.display = "none";
+        Status_Container.style.display = "flex";
       });
     });
   }
@@ -269,7 +271,6 @@ function PomoDoroTimer() {
 }
 PomoDoroTimer();
 function DailyGoal() {
- 
   let GoalArray = [];
   if (localStorage.getItem("Goal")) {
     GoalArray = JSON.parse(localStorage.getItem("Goal"));
@@ -294,7 +295,6 @@ function DailyGoal() {
     Goal_page.textContent = fullDate;
     return fullDate;
   }
-
 
   function RenderData(goal) {
     let Goal = document.createElement("div");
@@ -333,17 +333,16 @@ function DailyGoal() {
     return Goal;
   }
 
-
   function SendingToArrayData() {
     let Goal_holder = document.querySelector(".Goal_holder");
     let Goal_input = document.getElementById("Goal_input");
     let goal_Add_Btn = document.getElementById("goal_Add");
     let ImpcheckedInput = document.querySelector("#importantToggle");
-    
+
     goal_Add_Btn.addEventListener("click", () => {
       let importantToggleValue = ImpcheckedInput.checked;
       // console.log(importantToggleValue);
-      
+
       const text = Goal_input.value.trim();
       if (!text) return;
       let GoalData = {
@@ -353,8 +352,7 @@ function DailyGoal() {
         date: TodayDate(),
       };
       Goal_holder.appendChild(RenderData(GoalData)); // ⬅️ append the element
-      // console.log(document.querySelectorAll(".Goal"));
-      ResetGoal(date);
+
       GoalArray.push(GoalData);
       localStorage.setItem("Goal", JSON.stringify(GoalArray));
       Goal_input.value = "";
@@ -363,9 +361,7 @@ function DailyGoal() {
     });
   }
 
-
   SendingToArrayData();
-
 
   function dltGoal() {
     const Goal_holder = document.querySelector(".Goal_holder");
@@ -394,7 +390,6 @@ function DailyGoal() {
       console.log(GoalArray);
     });
   }
-
 
   dltGoal();
   function EditGoal() {
@@ -456,72 +451,69 @@ function DailyGoal() {
         return;
       }
     });
-    function SaveGoal(Goal) {
-      let left = Goal.querySelector(".checkBox_GoalName");
-      let input = left.querySelector(".GoalEditInput");
-      if (!input) return;
-
-      let newText = input.value.trim();
-      let FinalText = newText || input.dataset.GoalValue;
-      let paragraph = document.createElement("p");
-      paragraph.textContent = FinalText;
-      input.replaceWith(paragraph);
-
-      const id = Goal.dataset.id;
-      const idx = GoalArray.findIndex((g) => String(g.id) === String(id));
-      if (idx > -1) {
-        GoalArray[idx].text = FinalText;
-        localStorage.setItem("Goal", JSON.stringify(GoalArray));
-      }
-
-      const actions = Goal.querySelector(".Goal_edit_delete");
-      actions.querySelector(".EditGoal").style.display = "block";
-      actions.querySelector(".DltButton").style.display = "block";
-      actions.querySelector(".CancelBtn")?.remove();
-      actions.querySelector(".SaveBtn")?.remove();
-    }
-    function CanceEditGoal(Goal) {
-      let left = Goal.querySelector(".checkBox_GoalName");
-      let GoalEditInput = left.querySelector(".GoalEditInput");
-
-      let p = document.querySelector("p");
-      p.textContent = GoalEditInput.dataset.GoalValue;
-      GoalEditInput.replaceWith(p);
-
-      let Goal_edit_delete = Goal.querySelector(".Goal_edit_delete");
-
-      Goal_edit_delete.querySelector(".SaveBtn")?.remove();
-      Goal_edit_delete.querySelector(".CancelBtn")?.remove();
-
-      Goal_edit_delete.querySelector(".DltButton").style.display = "block";
-      Goal_edit_delete.querySelector(".EditGoal").style.display = "block";
-    }
-    // CanceEditGoal()
   }
 
+  function SaveGoal(Goal) {
+    let left = Goal.querySelector(".checkBox_GoalName");
+    let input = left.querySelector(".GoalEditInput");
+    if (!input) return;
 
-  EditGoal();
+    let newText = input.value.trim();
+    let FinalText = newText || input.dataset.GoalValue;
+    let paragraph = document.createElement("p");
+    paragraph.textContent = FinalText;
+    input.replaceWith(paragraph);
 
+    const id = Goal.dataset.id;
+    const idx = GoalArray.findIndex((g) => String(g.id) === String(id));
+    if (idx > -1) {
+      GoalArray[idx].text = FinalText;
+      localStorage.setItem("Goal", JSON.stringify(GoalArray));
+    }
 
+    const actions = Goal.querySelector(".Goal_edit_delete");
+    actions.querySelector(".EditGoal").style.display = "block";
+    actions.querySelector(".DltButton").style.display = "block";
+    actions.querySelector(".CancelBtn")?.remove();
+    actions.querySelector(".SaveBtn")?.remove();
+  }
 
-  function ResetGoal(date) {
-    const last = JSON.parse(localStorage.getItem("Goal"));
-    // console.log(last);
-    let Dates = new Date();
-    let year = Dates.getFullYear();
-    let month = (Dates.getMonth() + 1).toString().padStart(2, "0");
-    let Day = Dates.getDate().toString().padStart(2, "0");
-    let Fulldate = `${year}-${month}-${Day}`;
-    if (date !== Fulldate) {
+  function CanceEditGoal(Goal) {
+    let left = Goal.querySelector(".checkBox_GoalName");
+    let GoalEditInput = left.querySelector(".GoalEditInput");
+
+    let p = document.querySelector("p");
+    p.textContent = GoalEditInput.dataset.GoalValue;
+    GoalEditInput.replaceWith(p);
+
+    let Goal_edit_delete = Goal.querySelector(".Goal_edit_delete");
+
+    Goal_edit_delete.querySelector(".SaveBtn")?.remove();
+    Goal_edit_delete.querySelector(".CancelBtn")?.remove();
+
+    Goal_edit_delete.querySelector(".DltButton").style.display = "block";
+    Goal_edit_delete.querySelector(".EditGoal").style.display = "block";
+  }
+
+    function ResetGoal() {
+    const last = JSON.parse(localStorage.getItem("Goal", GoalArray));
+    let getDate = new Date();
+    let Year = getDate.getFullYear();
+    let Month = (getDate.getMonth() + 1).toString().padStart(2, "0");
+    let date = getDate.getDate().toString().padStart(2, "0");
+    let fullDate = `${Year}-${Month}-${date}`;
+    if (!last.some((e) => e.date === fullDate)) {
+      let toady = last.filter((e) => e.date === fullDate);
+      console.log(toady);
+
+      localStorage.setItem("Goal", JSON.stringify(toady));
       let Goal_holder = document.querySelector(".Goal_holder");
-      if (!Goal_holder.querySelector(".Goal")) return;
-      let Goal = Goal_holder.querySelectorAll(".Goal");
-      // console.log(Goal);
-      Goal_holder.querySelectorAll(".Goal").forEach((goal) => {});
+      Goal_holder.innerHTML = "";
+      toady.forEach((e) => Goal_holder.appendChild(RenderData(e)));
     }
   }
+  ResetGoal();
 
-   
-  // localStorage.clear();
+
 }
 DailyGoal();
