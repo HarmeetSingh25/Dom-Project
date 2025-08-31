@@ -549,6 +549,8 @@ setInterval(() => {
   TimerWeather();
 }, 1000);
 console.log(3)
+
+
 async function WeatherApi() {
   let ApiKey = "e5f0f6aa6321423082d111800253108";
   let city = "Ludhiana";
@@ -556,23 +558,23 @@ async function WeatherApi() {
     `https://api.weatherapi.com/v1/current.json?key=${ApiKey}&q=${city}`
   );
   let data = null;
-  data = await response.json();
-  console.log(data.current);
-  console.log(data.current.condition.text);
-  let Temp = document.querySelector("#Temp");
-  Temp.textContent = `Weather : ${data.current.temp_c}°C`;
+  try {
+    let response = await fetch(
+      `https://api.weatherapi.com/v1/current.json?key=${ApiKey}&q=${city}`
+    );
 
-  let Text = document.querySelector("#Text");
-  Text.textContent = `${data.current.condition.text}`;
+    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
 
-  let precip_mm = document.querySelector("#precip_mm");
-  precip_mm.innerHTML = `Precipitation : ${data.current.precip_mm}`;
+    let data = await response.json();
 
-  let wind_kph = document.querySelector("#wind_kph");
-  wind_kph.textContent = `Winds : ${data.current.wind_kph}`;
-
-  let humidity = document.querySelector("#humidity");
-  humidity.textContent = `Humidity${data.current.humidity}`;
+    document.querySelector("#Temp").textContent = `Weather : ${data.current.temp_c}°C`;
+    document.querySelector("#Text").textContent = data.current.condition.text;
+    document.querySelector("#precip_mm").textContent = `Precipitation : ${data.current.precip_mm}`;
+    document.querySelector("#wind_kph").textContent = `Winds : ${data.current.wind_kph}`;
+    document.querySelector("#humidity").textContent = `Humidity : ${data.current.humidity}`;
+  } catch (err) {
+    console.error("Weather API failed:", err);
+  }
 }
 
 ;
