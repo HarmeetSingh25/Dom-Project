@@ -548,7 +548,7 @@ TimerWeather();
 setInterval(() => {
   TimerWeather();
 }, 1000);
-
+console.log(3)
 async function WeatherApi() {
   let ApiKey = "e5f0f6aa6321423082d111800253108";
   let city = "Ludhiana";
@@ -575,6 +575,6 @@ async function WeatherApi() {
   humidity.textContent = `Humidity${data.current.humidity}`;
 }
 
-console.log("hello");
+;
 
 WeatherApi();
