@@ -498,7 +498,7 @@ function DailyGoal() {
   }
 
   function ResetGoal() {
-    const last = JSON.parse(localStorage.getItem("Goal", GoalArray));
+    const last = JSON.parse(localStorage.getItem("Goal", GoalArray)) || [];
     let getDate = new Date();
     let Year = getDate.getFullYear();
     let Month = (getDate.getMonth() + 1).toString().padStart(2, "0");
