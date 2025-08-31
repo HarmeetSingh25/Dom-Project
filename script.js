@@ -532,26 +532,47 @@ function TimerWeather() {
   ];
   let Day = WeeksDays[date.getDay()];
   let Hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+  let AmPm = date.getHours();
   let Minutes = date.getMinutes();
   let seconds = date.getSeconds();
-  Day_city.textContent = `${Day}--${Hours}:${Minutes.toString().padStart(
+  Day_city.textContent = `${Day}:-${Hours.toString().padStart(
     2,
     "0"
-  )}:${seconds.toString().padStart(2, "0")}  ${Hours > 12 ? "PM" : "AM"}`;
+  )}:${Minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}  ${AmPm > 12 ? "PM" : "AM"}`;
+  // console.log(AmPm > 12 ? "PM" : "AM");
 }
-TimerWeather()
+TimerWeather();
 
 setInterval(() => {
   TimerWeather();
 }, 1000);
-let data = null;
-async function WeatherApi() {
-  var response = await fetch(
-    `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`
-  );
 
-  let data = await Response.json();
-  console.log(data);
+async function WeatherApi() {
+  let ApiKey = "e5f0f6aa6321423082d111800253108";
+  let city = "Ludhiana";
+  var response = await fetch(
+    `http://api.weatherapi.com/v1/current.json?key=${ApiKey}&q=${city}`
+  );
+  let data = null;
+  data = await response.json();
+  console.log(data.current);
+  console.log(data.current.condition.text);
+  let Temp = document.querySelector("#Temp");
+  Temp.textContent = `Weather : ${data.current.temp_c}°C`;
+
+  let Text = document.querySelector("#Text");
+  Text.textContent = `${data.current.condition.text}`;
+
+  let precip_mm = document.querySelector("#precip_mm");
+  precip_mm.innerHTML = `Precipitation : ${data.current.precip_mm}`;
+
+  let wind_kph = document.querySelector("#wind_kph");
+  wind_kph.textContent = `Winds : ${data.current.wind_kph}`;
+
+  let humidity = document.querySelector("#humidity");
+  humidity.textContent = `Humidity${data.current.humidity}`;
 }
 
 WeatherApi();

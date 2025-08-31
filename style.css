@@ -588,6 +588,10 @@ svg {
   font-family: light;
   font-size: 2.5rem;
 }
+.Weather_Status{
+text-align: end;
+}
+
 .Weather_Status h1{
   font-size: 5rem;
 }
