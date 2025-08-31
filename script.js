@@ -551,6 +551,7 @@ setInterval(() => {
 console.log(3)
 
 async function WeatherApi() {
+  console.log("WeatherApi function started ✅");
   let ApiKey = "e5f0f6aa6321423082d111800253108";
   let city = "Ludhiana";
 
@@ -558,16 +559,11 @@ async function WeatherApi() {
     let response = await fetch(
       `https://api.weatherapi.com/v1/current.json?key=${ApiKey}&q=${city}`
     );
-
-    if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    console.log("Response status:", response.status);
 
     let data = await response.json();
+    console.log("Weather data:", data);
 
-    document.querySelector("#Temp").textContent = `Weather : ${data.current.temp_c}°C`;
-    document.querySelector("#Text").textContent = data.current.condition.text;
-    document.querySelector("#precip_mm").textContent = `Precipitation : ${data.current.precip_mm}`;
-    document.querySelector("#wind_kph").textContent = `Winds : ${data.current.wind_kph}`;
-    document.querySelector("#humidity").textContent = `Humidity : ${data.current.humidity}`;
   } catch (err) {
     console.error("Weather API failed:", err);
   }
