@@ -575,4 +575,5 @@ async function WeatherApi() {
   humidity.textContent = `Humidity${data.current.humidity}`;
 }
 
+
 WeatherApi();
