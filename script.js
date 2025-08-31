@@ -553,7 +553,7 @@ async function WeatherApi() {
   let ApiKey = "e5f0f6aa6321423082d111800253108";
   let city = "Ludhiana";
   var response = await fetch(
-    `http://api.weatherapi.com/v1/current.json?key=${ApiKey}&q=${city}`
+    `https://api.weatherapi.com/v1/current.json?key=${ApiKey}&q=${city}`
   );
   let data = null;
   data = await response.json();
